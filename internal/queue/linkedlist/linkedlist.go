@@ -23,6 +23,11 @@ func (l *LinkedList) PeekFront() string {
 	return val
 }
 
+// Count .
+func (l *LinkedList) Count() int {
+	return l.list.Len()
+}
+
 // NewLinkedList .
 func NewLinkedList() *LinkedList {
 	return &LinkedList{
