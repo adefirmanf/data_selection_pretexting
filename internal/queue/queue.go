@@ -8,9 +8,9 @@ type Queue struct {
 // I .
 type I interface {
 	PushBack(UserID string)
-	PullFront(UserID string)
+	PullFront() string
 	PeekFront() string
-	Count() int
+	Size() int
 }
 
 // PushBack .
@@ -19,8 +19,8 @@ func (q *Queue) PushBack(UserID string) {
 }
 
 // PullFront .
-func (q *Queue) PullFront(UserID string) {
-	q.repository.PullFront(UserID)
+func (q *Queue) PullFront() string {
+	return q.repository.PullFront()
 }
 
 // PeekFront .
@@ -28,9 +28,9 @@ func (q *Queue) PeekFront() string {
 	return q.repository.PeekFront()
 }
 
-// Count .
-func (q *Queue) Count() int {
-	return q.repository.Count()
+// Size .
+func (q *Queue) Size() int {
+	return q.repository.Size()
 }
 
 // NewQueue .

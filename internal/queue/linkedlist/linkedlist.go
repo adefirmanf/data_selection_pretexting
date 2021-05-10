@@ -12,9 +12,11 @@ func (l *LinkedList) PushBack(UserID string) {
 	l.list.PushBack(UserID)
 }
 
-// PushFront .
-func (l *LinkedList) PushFront(UserID string) {
-	l.list.PushFront(UserID)
+// PullFront .
+func (l *LinkedList) PullFront() string {
+	val := l.list.Front().Value.(string)
+	l.list.Remove(l.list.Front())
+	return val
 }
 
 // PeekFront .
@@ -23,8 +25,8 @@ func (l *LinkedList) PeekFront() string {
 	return val
 }
 
-// Count .
-func (l *LinkedList) Count() int {
+// Size .
+func (l *LinkedList) Size() int {
 	return l.list.Len()
 }
 
