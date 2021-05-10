@@ -1,4 +1,4 @@
-module github.com/adefirmanf/go-api-template
+module github.com/adefirmanf/data_selection_pretexting
 
 go 1.14
 
