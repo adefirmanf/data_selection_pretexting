@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go",
+    "go.vetOnSave": "workspace",
+    "go.lintOnSave": "package",
+}

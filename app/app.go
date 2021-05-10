@@ -15,7 +15,7 @@ type Logger struct{}
 
 // MetricsApp .
 func buildMetricsApp() *Metrics {
-	return &Metrics{	}
+	return &Metrics{}
 }
 
 // New .
