@@ -89,12 +89,13 @@ func NewScrapperTweets(config *Config, httpClient *http.Client, storage *storage
 	}
 }
 
-// func (s *ScrapperTweets) httpRequestTweets(Query string, endpoint string, u url.URL) (*http.Response, error) {
-// 	url := s.config.url + "/2/users/" + UserID + endpoint
-// 	req, err := http.NewRequest(http.MethodGet, url, nil)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req.Header.Add("Authorization", "Bearer "+s.config.bearerToken)
-// 	return s.httpClient.Do(req)
-// }
+func (s *ScrapperTweets) httpRequestTweets(q QueryURL) (*http.Response, error) {
+	url := s.config.url + "?tweet.fields=author_id,id,created_at,possibly_sensitive&" + q.Encode()
+	print(url)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+s.config.bearerToken)
+	return s.httpClient.Do(req)
+}
