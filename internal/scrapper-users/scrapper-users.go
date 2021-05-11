@@ -1,39 +1,80 @@
 package scrapperusers
 
 import (
+	"errors"
 	"net/http"
+	"time"
 
 	"github.com/adefirmanf/data_selection_pretexting/internal/queue"
 	"github.com/adefirmanf/data_selection_pretexting/internal/storage"
 )
 
+var (
+	errorNotFound     = "HTTP Error is Not Found"
+	rateLimitExceeded = "Rate Limit Exceeded"
+)
+
+// UserResponse .
+type userResponse struct {
+	Errors interface{} `json:"errors"`
+	Data   []data      `json:"data"`
+}
+
+type data struct {
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	Username  string    `json:"username"`
+	CreatedAt time.Time `json:"created_at"`
+	Verified  bool      `json:"verified"`
+}
+
+// Config .
+type Config struct {
+	url         string
+	bearerToken string
+}
+
+// NewConfig .
+func NewConfig(url string, bearerToken string) *Config {
+	return &Config{
+		url:         url,
+		bearerToken: bearerToken,
+	}
+}
+
 // ScrapperUsers .
 type ScrapperUsers struct {
-	HTTPClient *http.Client
-	Storage    *storage.Storage
-	Queue      *queue.Queue
-}
-
-// FetchFollowings .
-func (s *ScrapperUsers) FetchFollowings(UserID string) {
-
-}
-
-// FetchFollowers .
-func (s *ScrapperUsers) FetchFollowers(UserID string) {
-
-}
-
-// FetchLookup .
-func (s *ScrapperUsers) FetchLookup(UserID string) {
-
+	httpClient *http.Client
+	storage    *storage.Storage
+	queue      *queue.Queue
+	config     *Config
 }
 
 // NewScrapperUser .
-func NewScrapperUser(httpClient *http.Client, storage *storage.Storage, queue *queue.Queue) *ScrapperUsers {
+func NewScrapperUser(config *Config, httpClient *http.Client, storage *storage.Storage, queue *queue.Queue) *ScrapperUsers {
 	return &ScrapperUsers{
-		HTTPClient: httpClient,
-		Storage:    storage,
-		Queue:      queue,
+		config:     config,
+		httpClient: httpClient,
+		storage:    storage,
+		queue:      queue,
 	}
+}
+func (s *ScrapperUsers) httpRequestUsers(UserID string, endpoint string) (*http.Response, error) {
+	url := s.config.url + "/2/users/" + UserID + endpoint
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+s.config.bearerToken)
+	return s.httpClient.Do(req)
+}
+
+func httpErrorClientHandler(response *http.Response) (*http.Response, error) {
+	if response.StatusCode == http.StatusNotFound {
+		return response, errors.New(errorNotFound)
+	}
+	if response.StatusCode == http.StatusTooManyRequests {
+		return response, errors.New(rateLimitExceeded)
+	}
+	return response, nil
 }
