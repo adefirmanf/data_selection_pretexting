@@ -1,6 +1,7 @@
 package scrappertweets
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -9,6 +10,13 @@ import (
 
 	"github.com/adefirmanf/data_selection_pretexting/internal/queue"
 	"github.com/adefirmanf/data_selection_pretexting/internal/storage"
+)
+
+var (
+	errorNotFound     = "HTTP Error is Not Found"
+	rateLimitExceeded = "Rate Limit Exceeded"
+	forbidden         = "Forbidden access usage"
+	unauthorized      = "Unauthorized / Invalid token "
 )
 
 type tweetResponse struct {
@@ -98,4 +106,20 @@ func (s *ScrapperTweets) httpRequestTweets(q QueryURL) (*http.Response, error) {
 	}
 	req.Header.Add("Authorization", "Bearer "+s.config.bearerToken)
 	return s.httpClient.Do(req)
+}
+
+func httpErrorClientHandler(response *http.Response) (*http.Response, error) {
+	if response.StatusCode == http.StatusNotFound {
+		return response, errors.New(errorNotFound)
+	}
+	if response.StatusCode == http.StatusTooManyRequests {
+		return response, errors.New(rateLimitExceeded)
+	}
+	if response.StatusCode == http.StatusForbidden {
+		return response, errors.New(forbidden)
+	}
+	if response.StatusCode == http.StatusUnauthorized {
+		return response, errors.New(unauthorized)
+	}
+	return response, nil
 }

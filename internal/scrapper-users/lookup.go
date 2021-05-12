@@ -3,7 +3,6 @@ package scrapperusers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 )
 
@@ -27,9 +26,9 @@ func (s *ScrapperUsers) FetchLookup(UserID string) error {
 		return errors.New("Failed to retrieve data")
 	}
 
-	for _, v := range data.Data {
-		fmt.Println(v.Username)
-	}
+	// for _, v := range data.Data {
+	// 	fmt.Println(v.Username)
+	// }
 
 	return nil
 }

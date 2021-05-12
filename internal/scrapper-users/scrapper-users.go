@@ -12,6 +12,7 @@ import (
 var (
 	errorNotFound     = "HTTP Error is Not Found"
 	rateLimitExceeded = "Rate Limit Exceeded"
+	forbidden         = "Invalid Token / Forbidden access usage"
 )
 
 // UserResponse .
@@ -26,6 +27,14 @@ type data struct {
 	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"created_at"`
 	Verified  bool      `json:"verified"`
+}
+
+type friendshipResponse struct {
+	Meta resultCount `json:"meta"`
+}
+
+type resultCount struct {
+	ResultCount int `json:"result_count"`
 }
 
 // Config .
@@ -75,6 +84,9 @@ func httpErrorClientHandler(response *http.Response) (*http.Response, error) {
 	}
 	if response.StatusCode == http.StatusTooManyRequests {
 		return response, errors.New(rateLimitExceeded)
+	}
+	if response.StatusCode == http.StatusForbidden {
+		return response, errors.New(forbidden)
 	}
 	return response, nil
 }

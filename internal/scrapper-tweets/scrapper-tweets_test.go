@@ -8,11 +8,14 @@ import (
 )
 
 func TestScrapper(t *testing.T) {
-	q := scrappertweets.NewQueryURL("kontakBRI", "Whatsapp|Mohon Maaf", "")
+	q := scrappertweets.NewQueryURL("JeniusConnect", "Whatsapp|Mohon Maaf", "")
 
 	config := scrappertweets.NewConfig("https://api.twitter.com/2/tweets/search/recent", "")
 	httpClient := http.Client{}
 	scrapper := scrappertweets.NewScrapperTweets(config, &httpClient, nil, nil)
-	scrapper.FetchTweets(q)
+	err := scrapper.FetchTweets(q)
+	if err != nil {
+		t.Error(err)
+	}
 
 }

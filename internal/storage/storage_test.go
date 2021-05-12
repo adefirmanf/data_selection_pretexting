@@ -13,16 +13,10 @@ func TestStoragePostgresql(t *testing.T) {
 	pg := postgresql.NewConfig("postgres://postgres:social_engineering@localhost:5432/social_engineering?sslmode=disable")
 	storage := storage.NewStorage(pg.OpenConnection())
 
-	tweets, err := storage.GetTweets()
+	res, err := storage.GetUserByUserAuthorID("1")
 	if err != nil {
 		t.Error(err)
 	}
-	for _, v := range tweets {
-		fmt.Println(&v.TweetText)
-	}
-	// err = storage.InsertTweets("12", "1212", "1212", "test", "bri", "", 0, time.Now(), false)
-	if err != nil {
-		t.Error(err)
-	}
+	fmt.Println(res)
 	// s := storage.NewStorage()
 }

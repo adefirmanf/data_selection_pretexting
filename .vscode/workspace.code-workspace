@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": ".."
+		},
+		{
+			"path": "../../../Colleges/social_engineering_analysis"
 		}
 	],
 	"settings": {}

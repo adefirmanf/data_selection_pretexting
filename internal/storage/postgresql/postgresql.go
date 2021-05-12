@@ -61,6 +61,19 @@ func (p *Postgresql) GetUsers() ([]*storage.User, error) {
 	return users, nil
 }
 
+// GetUserByUserAuthorID .
+func (p *Postgresql) GetUserByUserAuthorID(TweetAuthorUserID string) (*storage.User, error) {
+	q := fmt.Sprintf(`select user_id, is_verified, total_following, total_followers, username, name, user_created_at from users where user_id = $1`)
+	var user storage.User
+
+	err := p.conn.QueryRow(q, TweetAuthorUserID).Scan(&user.UserID, &user.UserIsVerified, &user.UserTotalFollowing, &user.UserTotalFollowers, &user.UserUsername, &user.UserFullName, &user.UserCreatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 // GetTweets .
 func (p *Postgresql) GetTweets() ([]*storage.Tweet, error) {
 	q := fmt.Sprintf("select tweet_text from tweets")

@@ -11,6 +11,7 @@ type Storage struct {
 type I interface {
 	GetUsers() ([]*User, error)
 	GetTweets() ([]*Tweet, error)
+	GetUserByUserAuthorID(TweetAuthorUserID string) (*User, error)
 	// GetLastToken() (*Token, error)
 	// GetTweets()
 	// GetLastToken()
@@ -32,6 +33,11 @@ type I interface {
 // GetUsers .
 func (s *Storage) GetUsers() ([]*User, error) {
 	return s.datasource.GetUsers()
+}
+
+// GetUserByUserAuthorID .
+func (s *Storage) GetUserByUserAuthorID(TweetAuthorUserID string) (*User, error) {
+	return s.datasource.GetUserByUserAuthorID(TweetAuthorUserID)
 }
 
 // GetTweets .
