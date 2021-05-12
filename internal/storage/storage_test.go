@@ -13,7 +13,7 @@ func TestStoragePostgresql(t *testing.T) {
 	pg := postgresql.NewConfig("postgres://postgres:social_engineering@localhost:5432/social_engineering?sslmode=disable")
 	storage := storage.NewStorage(pg.OpenConnection())
 
-	res, err := storage.GetUserByUserAuthorID("1")
+	res, err := storage.GetLastToken()
 	if err != nil {
 		t.Error(err)
 	}

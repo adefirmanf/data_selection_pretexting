@@ -12,7 +12,7 @@ type I interface {
 	GetUsers() ([]*User, error)
 	GetTweets() ([]*Tweet, error)
 	GetUserByUserAuthorID(TweetAuthorUserID string) (*User, error)
-	// GetLastToken() (*Token, error)
+	GetLastToken() (*Token, error)
 	// GetTweets()
 	// GetLastToken()
 
@@ -54,6 +54,11 @@ func (s *Storage) InsertTweets(
 	TweetPossiblySensitive bool,
 ) error {
 	return s.datasource.InsertTweets(TweetID, TweetAuthorID, TweetText, SuspiciousKeywords, TweetMentionedAccount, OptionalParameters, TokenID, TweetCreatedAt, TweetPossiblySensitive)
+}
+
+// GetLastToken .
+func (s *Storage) GetLastToken() (*Token, error) {
+	return s.datasource.GetLastToken()
 }
 
 // InsertToken .

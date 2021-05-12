@@ -116,6 +116,18 @@ func (p *Postgresql) InsertTweets(TweetID, TweetAuthorID, TweetText, SuspiciousK
 	return nil
 }
 
+// GetLastToken .
+func (p *Postgresql) GetLastToken() (*storage.Token, error) {
+	q := fmt.Sprintf(`select tweet_next_token from tokens where id=(select max(id) from tokens);`)
+	var token storage.Token
+
+	err := p.conn.QueryRow(q).Scan(&token.TweetNextToken)
+	if err != nil {
+		return nil, err
+	}
+	return &token, nil
+}
+
 // InsertToken .
 func (p *Postgresql) InsertToken(TweetNextToken, URL string) error {
 	now := time.Now()
