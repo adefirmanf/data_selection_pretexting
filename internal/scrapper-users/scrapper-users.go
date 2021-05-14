@@ -16,12 +16,13 @@ var (
 )
 
 // UserResponse .
-type userResponse struct {
+type UserResponse struct {
 	Errors interface{} `json:"errors"`
-	Data   []data      `json:"data"`
+	Data   []Data      `json:"data"`
 }
 
-type data struct {
+// Data .
+type Data struct {
 	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	Username  string    `json:"username"`
@@ -29,11 +30,13 @@ type data struct {
 	Verified  bool      `json:"verified"`
 }
 
-type friendshipResponse struct {
-	Meta resultCount `json:"meta"`
+// FriendshipResponse .
+type FriendshipResponse struct {
+	Meta ResultCount `json:"meta"`
 }
 
-type resultCount struct {
+// ResultCount .
+type ResultCount struct {
 	ResultCount int `json:"result_count"`
 }
 

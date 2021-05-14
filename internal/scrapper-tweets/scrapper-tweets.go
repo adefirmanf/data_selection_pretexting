@@ -7,9 +7,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/adefirmanf/data_selection_pretexting/internal/queue"
-	"github.com/adefirmanf/data_selection_pretexting/internal/storage"
 )
 
 var (
@@ -19,7 +16,8 @@ var (
 	unauthorized      = "Unauthorized / Invalid token "
 )
 
-type tweetResponse struct {
+// TweetResponse .
+type TweetResponse struct {
 	Data []data `json:"data"`
 	Meta meta   `json:"meta"`
 }
@@ -43,6 +41,7 @@ type QueryURL struct {
 	// You can set multiple keywords by using delimiter with comma
 	SuspiciousKeywords string
 	AdditionalParams   string
+	NextToken          string
 }
 
 // NewQueryURL .
@@ -61,8 +60,19 @@ func (q *QueryURL) Encode() string {
 
 	var s url.URL
 	query := s.Query()
+
+	if q.NextToken != "" {
+		query.Set("next_token", q.NextToken)
+
+	}
 	query.Set("query", rawquery)
+
 	return query.Encode()
+}
+
+// SetNextToken .
+func (q *QueryURL) SetNextToken(nextToken string) {
+	q.NextToken = nextToken
 }
 
 // Config .
@@ -82,18 +92,14 @@ func NewConfig(url string, bearerToken string) *Config {
 // ScrapperTweets .
 type ScrapperTweets struct {
 	httpClient *http.Client
-	storage    *storage.Storage
-	queue      *queue.Queue
 	config     *Config
 }
 
 // NewScrapperTweets .
-func NewScrapperTweets(config *Config, httpClient *http.Client, storage *storage.Storage, queue *queue.Queue) *ScrapperTweets {
+func NewScrapperTweets(config *Config, httpClient *http.Client) *ScrapperTweets {
 	return &ScrapperTweets{
 		config:     config,
 		httpClient: httpClient,
-		storage:    storage,
-		queue:      queue,
 	}
 }
 

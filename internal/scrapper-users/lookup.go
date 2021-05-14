@@ -16,7 +16,7 @@ func (s *ScrapperUsers) FetchLookup(UserID string) error {
 	if err != nil {
 		return err
 	}
-	var data userResponse
+	var data UserResponse
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		return err

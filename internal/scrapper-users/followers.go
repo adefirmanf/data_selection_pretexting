@@ -2,39 +2,30 @@ package scrapperusers
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"io/ioutil"
 )
 
 // FetchFollowers .
-func (s *ScrapperUsers) FetchFollowers(UserID string) error {
+func (s *ScrapperUsers) FetchFollowers(UserID string) (*FriendshipResponse, error) {
 	res, err := s.httpRequestUsers(UserID, "/followers")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	res, err = httpErrorClientHandler(res)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	var data userResponse
+	var data FriendshipResponse
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if data.Errors != nil {
-		return errors.New("Failed to retrieve data")
-	}
-
-	for _, v := range data.Data {
-		fmt.Println(v.Username)
-	}
 	// fmt.Println(data.Data)
-	return nil
+	return &data, nil
 }
