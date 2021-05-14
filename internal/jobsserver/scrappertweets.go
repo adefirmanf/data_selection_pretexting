@@ -1,8 +1,6 @@
 package jobsserver
 
 import (
-	"log"
-
 	scrappertweets "github.com/adefirmanf/data_selection_pretexting/internal/scrapper-tweets"
 )
 
@@ -29,7 +27,7 @@ type ScrapperTweets struct {
 }
 
 // NewScrapperTweets .
-func NewScrapperTweets(s *scrappertweets.ScrapperTweets, job *JobServer, qs *QueryURLS) *ScrapperTweets {
+func NewScrapperTweets(job *JobServer, s *scrappertweets.ScrapperTweets, qs *QueryURLS) *ScrapperTweets {
 	return &ScrapperTweets{
 		jobserver:             job,
 		queryURLS:             qs,
@@ -55,9 +53,18 @@ func (s *ScrapperTweets) Scrape(maxBatch int) error {
 				break
 			}
 			for _, data := range res.Data {
-				s.jobserver.storage.InsertTweets(data.TweetID, data.AuthorID, data.Text, queryURL.SuspiciousKeywords, queryURL.MentionedAccount, queryURL.AdditionalParams, 0, data.CreatedAt, data.PossiblySensitive)
+				err := s.jobserver.storage.InsertTweets(data.TweetID, data.AuthorID, data.Text, queryURL.SuspiciousKeywords, queryURL.MentionedAccount, queryURL.AdditionalParams, 0, data.CreatedAt, data.PossiblySensitive)
+				if err != nil {
+					return err
+				}
+				user, err := s.jobserver.storage.GetUserByUserAuthorID(data.AuthorID)
+				if err != nil {
+					return err
+				}
+				if user == nil {
+					s.jobserver.queue.PushBack(data.AuthorID)
+				}
 			}
-			log.Println(res)
 			nextToken = res.Meta.NextToken
 			i = i + 1
 		}

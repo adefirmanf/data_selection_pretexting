@@ -9,7 +9,7 @@ import (
 )
 
 // App .
-type App struct {}
+type App struct{}
 
 func (a *App) init() http.Handler {
 	r := chi.NewRouter()

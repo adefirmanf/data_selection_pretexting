@@ -19,7 +19,7 @@ type Tweet struct {
 
 // User .
 type User struct {
-	UserID             int
+	UserID             string
 	UserIsVerified     bool
 	UserTotalFollowing int
 	UserTotalFollowers int

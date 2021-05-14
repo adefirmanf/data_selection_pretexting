@@ -25,9 +25,13 @@ type I interface {
 	) error
 
 	InsertToken(TweetNextToken, URL string) error
-	// InsertUsers()
 
-	// UpdateUserByUserIDTwitter()
+	InsertUser(UserID, Username, Name string,
+		TotalFollowing, TotalFollowers int,
+		IsVerified bool,
+		UserCreatedAt time.Time) error
+
+	UpdateUserByUserIDTwitter(UserID string, TotalFollowing, TotalFollowers int) error
 }
 
 // GetUsers .
@@ -53,7 +57,11 @@ func (s *Storage) InsertTweets(
 	TweetCreatedAt time.Time,
 	TweetPossiblySensitive bool,
 ) error {
-	return s.datasource.InsertTweets(TweetID, TweetAuthorID, TweetText, SuspiciousKeywords, TweetMentionedAccount, OptionalParameters, TokenID, TweetCreatedAt, TweetPossiblySensitive)
+	return s.datasource.InsertTweets(TweetID, TweetAuthorID, TweetText, SuspiciousKeywords, TweetMentionedAccount,
+		OptionalParameters,
+		TokenID,
+		TweetCreatedAt,
+		TweetPossiblySensitive)
 }
 
 // GetLastToken .
@@ -64,6 +72,23 @@ func (s *Storage) GetLastToken() (*Token, error) {
 // InsertToken .
 func (s *Storage) InsertToken(TweetNextToken, URL string) error {
 	return s.datasource.InsertToken(TweetNextToken, URL)
+}
+
+// InsertUser .
+func (s *Storage) InsertUser(UserID, Username, Name string,
+	TotalFollowing, TotalFollowers int,
+	IsVerified bool,
+	UserCreatedAt time.Time,
+) error {
+	return s.datasource.InsertUser(UserID, Username, Name,
+		TotalFollowing, TotalFollowers,
+		IsVerified,
+		UserCreatedAt)
+}
+
+// UpdateUserByUserIDTwitter .
+func (s *Storage) UpdateUserByUserIDTwitter(UserID string, TotalFollowing, TotalFollowers int) error {
+	return s.datasource.UpdateUserByUserIDTwitter(UserID, TotalFollowing, TotalFollowers)
 }
 
 // NewStorage .

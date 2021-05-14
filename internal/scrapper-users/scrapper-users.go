@@ -18,16 +18,23 @@ var (
 // UserResponse .
 type UserResponse struct {
 	Errors interface{} `json:"errors"`
-	Data   []Data      `json:"data"`
+	Data   Data        `json:"data"`
 }
 
 // Data .
 type Data struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	Username  string    `json:"username"`
-	CreatedAt time.Time `json:"created_at"`
-	Verified  bool      `json:"verified"`
+	ID            string        `json:"id"`
+	Name          string        `json:"name"`
+	PublicMetrics PublicMetrics `json:"public_metrics"`
+	Username      string        `json:"username"`
+	CreatedAt     time.Time     `json:"created_at"`
+	Verified      bool          `json:"verified"`
+}
+
+// PublicMetrics .
+type PublicMetrics struct {
+	FollowersCount int `json:"followers_count"`
+	FollowingCount int `json:"following_count"`
 }
 
 // FriendshipResponse .
@@ -63,16 +70,14 @@ type ScrapperUsers struct {
 }
 
 // NewScrapperUser .
-func NewScrapperUser(config *Config, httpClient *http.Client, storage *storage.Storage, queue *queue.Queue) *ScrapperUsers {
+func NewScrapperUser(config *Config, httpClient *http.Client) *ScrapperUsers {
 	return &ScrapperUsers{
 		config:     config,
 		httpClient: httpClient,
-		storage:    storage,
-		queue:      queue,
 	}
 }
 func (s *ScrapperUsers) httpRequestUsers(UserID string, endpoint string) (*http.Response, error) {
-	url := s.config.url + "/2/users/" + UserID + endpoint
+	url := s.config.url + "/2/users/" + UserID + endpoint + "?user.fields=verified,created_at,location,description,public_metrics"
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err

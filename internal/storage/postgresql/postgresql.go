@@ -69,8 +69,13 @@ func (p *Postgresql) GetUserByUserAuthorID(TweetAuthorUserID string) (*storage.U
 	err := p.conn.QueryRow(q, TweetAuthorUserID).Scan(&user.UserID, &user.UserIsVerified, &user.UserTotalFollowing, &user.UserTotalFollowers, &user.UserUsername, &user.UserFullName, &user.UserCreatedAt)
 
 	if err != nil {
-		return nil, err
+		if err == sql.ErrNoRows {
+			return nil, nil
+		} else {
+			return nil, err
+		}
 	}
+
 	return &user, nil
 }
 
@@ -139,7 +144,28 @@ func (p *Postgresql) InsertToken(TweetNextToken, URL string) error {
 	return nil
 }
 
-// INSERT INTO tweets(tweet_id, tweet_author_id, tweet_possibly_sensitive," +
-//             "tweet_created_at, tweet_text, created_at, updated_at, token_id," +
-//             "sus_keywords, tweet_mentioned_account, optional_parameters) " +
-//             "VALUES(:a, :b, :c, :d, :e, now(), now(), :f, :g, :h, :i)
+// InsertUser .
+func (p *Postgresql) InsertUser(UserID, Username, Name string, TotalFollowing, TotalFollowers int, IsVerified bool, UserCreatedAt time.Time) error {
+	now := time.Now()
+	fmt.Println("AM I RUN?")
+	q := fmt.Sprintf(`insert into users (user_id, is_verified, total_following, total_followers, 
+					  username, name, user_created_at, created_at, updated_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9);`)
+	_, err := p.conn.Exec(q, UserID, IsVerified, TotalFollowing, TotalFollowers, Username, Name, UserCreatedAt, now, now)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	fmt.Println(err)
+	return nil
+}
+
+// UpdateUserByUserIDTwitter .
+func (p *Postgresql) UpdateUserByUserIDTwitter(UserID string, TotalFollowing, TotalFollowers int) error {
+	now := time.Now()
+	q := fmt.Sprintf(`update users set total_following = $1, total_followers = $2, updated_at = $3 where user_id = $4`)
+	_, err := p.conn.Exec(q, TotalFollowing, TotalFollowers, now, UserID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
