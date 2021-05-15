@@ -6,4 +6,6 @@ type IConfig interface {
 	Environment() string
 	AppPort() int
 	MetricsPort() int
+	PGConfigConnectionString() string
+	BearerTokenTwitter() string
 }

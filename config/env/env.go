@@ -24,6 +24,16 @@ func (e *Env) MetricsPort() int {
 	return getIntOrDefault(MetricsPort, 9100)
 }
 
+// PGConfigConnectionString .
+func (e *Env) PGConfigConnectionString() string {
+	return getStringOrDefault(PGConfigConnectionString, "")
+}
+
+// BearerTokenTwitter .
+func (e *Env) BearerTokenTwitter() string {
+	return getStringOrDefault(BearerTokenTwitter, "")
+}
+
 // New .
 func New() *Env {
 	return &Env{}

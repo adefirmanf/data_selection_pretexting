@@ -27,6 +27,16 @@ func (c *Config) MetricsPort() int {
 	return c.c.MetricsPort()
 }
 
+// PGConfigConnectionString .
+func (c *Config) PGConfigConnectionString() string {
+	return c.c.PGConfigConnectionString()
+}
+
+// BearerTokenTwitter .
+func (c *Config) BearerTokenTwitter() string {
+	return c.c.BearerTokenTwitter()
+}
+
 // Init .
 func Init(c IConfig) {
 	defaultConfig.c = c

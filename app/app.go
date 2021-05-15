@@ -3,6 +3,8 @@ package app
 import (
 	"net/http"
 
+	"github.com/adefirmanf/data_selection_pretexting/config"
+	"github.com/adefirmanf/data_selection_pretexting/config/env"
 	"github.com/adefirmanf/data_selection_pretexting/internal/queue"
 	"github.com/adefirmanf/data_selection_pretexting/internal/queue/linkedlist"
 	scrappertweets "github.com/adefirmanf/data_selection_pretexting/internal/scrapper-tweets"
@@ -35,8 +37,11 @@ func buildMetricsApp() *Metrics {
 
 // New .
 func New() *App {
-	token := "AAAAAAAAAAAAAAAAAAAAAKGDOQEAAAAAlrZppByCtx%2FgMDwOxPtUq9%2B1rgk%3D59cCihRFivSTtY9RdUcAokS8yhwTWQJ93RvFIjre8mdJtuLIAl"
-	pgconfig := postgresql.NewConfig("postgres://postgres:social_engineering@localhost:5432/social_engineering?sslmode=disable")
+	config.Init(env.New())
+	cfg := config.Load()
+
+	token := cfg.BearerTokenTwitter()
+	pgconfig := postgresql.NewConfig(cfg.PGConfigConnectionString())
 	ll := linkedlist.NewLinkedList()
 	scrapperTweetsCfg := scrappertweets.NewConfig("https://api.twitter.com/2/tweets/search/recent", token)
 	scrapperUsersCfg := scrapperusers.NewConfig("https://api.twitter.com", token)
