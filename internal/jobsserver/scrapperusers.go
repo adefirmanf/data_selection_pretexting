@@ -27,7 +27,7 @@ func (s *ScrapperUsers) Scrape(UserID string) error {
 	}
 	userResponse := res.Data
 
-	s.jobserver.storage.InsertUser(userResponse.ID, userResponse.Username, userResponse.Name, userResponse.PublicMetrics.FollowingCount, userResponse.PublicMetrics.FollowersCount, userResponse.Verified, userResponse.CreatedAt)
+	s.jobserver.storage.InsertUser(userResponse.ID, userResponse.Username, userResponse.Name, userResponse.Location, userResponse.PublicMetrics.FollowingCount, userResponse.PublicMetrics.FollowersCount, userResponse.Verified, userResponse.CreatedAt)
 	if err != nil {
 		s.jobserver.queue.PushBack(UserID)
 		return err

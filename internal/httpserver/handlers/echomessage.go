@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/adefirmanf/go-api-template/internal/httpserver/response"
+	"github.com/adefirmanf/data_selection_pretexting/internal/httpserver/response"
 )
 
 // EchoMessage .

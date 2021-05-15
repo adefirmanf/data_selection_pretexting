@@ -25,6 +25,7 @@ type User struct {
 	UserTotalFollowers int
 	UserUsername       string
 	UserFullName       string
+	Location           string
 	UserCreatedAt      time.Time
 	CreatedAt          time.Time
 	UpdatedAt          time.Time

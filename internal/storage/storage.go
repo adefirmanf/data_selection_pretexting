@@ -26,7 +26,7 @@ type I interface {
 
 	InsertToken(TweetNextToken, URL string) error
 
-	InsertUser(UserID, Username, Name string,
+	InsertUser(UserID, Username, Name, Location string,
 		TotalFollowing, TotalFollowers int,
 		IsVerified bool,
 		UserCreatedAt time.Time) error
@@ -75,12 +75,12 @@ func (s *Storage) InsertToken(TweetNextToken, URL string) error {
 }
 
 // InsertUser .
-func (s *Storage) InsertUser(UserID, Username, Name string,
+func (s *Storage) InsertUser(UserID, Username, Name, Location string,
 	TotalFollowing, TotalFollowers int,
 	IsVerified bool,
 	UserCreatedAt time.Time,
 ) error {
-	return s.datasource.InsertUser(UserID, Username, Name,
+	return s.datasource.InsertUser(UserID, Username, Name, Location,
 		TotalFollowing, TotalFollowers,
 		IsVerified,
 		UserCreatedAt)

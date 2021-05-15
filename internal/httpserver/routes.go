@@ -3,7 +3,7 @@ package httpserver
 import (
 	"net/http"
 
-	"github.com/adefirmanf/go-api-template/internal/httpserver/handlers"
+	"github.com/adefirmanf/data_selection_pretexting/internal/httpserver/handlers"
 
 	"github.com/go-chi/chi"
 )

@@ -26,6 +26,7 @@ type Data struct {
 	ID            string        `json:"id"`
 	Name          string        `json:"name"`
 	PublicMetrics PublicMetrics `json:"public_metrics"`
+	Location      string        `json:"location"`
 	Username      string        `json:"username"`
 	CreatedAt     time.Time     `json:"created_at"`
 	Verified      bool          `json:"verified"`

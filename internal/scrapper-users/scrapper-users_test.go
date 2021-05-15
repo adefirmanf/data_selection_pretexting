@@ -34,7 +34,7 @@ func TestScrapperUserLookup(t *testing.T) {
 		t.Run(v.name, func(t *testing.T) {
 			config := scrapperusers.NewConfig(v.url, "")
 			httpClient := http.Client{}
-			scrapper := scrapperusers.NewScrapperUser(config, &httpClient, nil, nil)
+			scrapper := scrapperusers.NewScrapperUser(config, &httpClient)
 			_, err := scrapper.FetchLookup("1391596003908673539")
 
 			if v.is_error {
@@ -52,7 +52,7 @@ func TestScrapperUserFollowers(t *testing.T) {
 	url := errorURL
 	config := scrapperusers.NewConfig(url, "")
 	httpClient := http.Client{}
-	scrapper := scrapperusers.NewScrapperUser(config, &httpClient, nil, nil)
+	scrapper := scrapperusers.NewScrapperUser(config, &httpClient)
 	res, err := scrapper.FetchFollowers("1391596003908673539")
 	if err != nil {
 		t.Error(err)

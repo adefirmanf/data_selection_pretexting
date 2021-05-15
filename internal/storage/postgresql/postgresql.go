@@ -145,17 +145,14 @@ func (p *Postgresql) InsertToken(TweetNextToken, URL string) error {
 }
 
 // InsertUser .
-func (p *Postgresql) InsertUser(UserID, Username, Name string, TotalFollowing, TotalFollowers int, IsVerified bool, UserCreatedAt time.Time) error {
+func (p *Postgresql) InsertUser(UserID, Username, Name, Location string, TotalFollowing, TotalFollowers int, IsVerified bool, UserCreatedAt time.Time) error {
 	now := time.Now()
-	fmt.Println("AM I RUN?")
 	q := fmt.Sprintf(`insert into users (user_id, is_verified, total_following, total_followers, 
-					  username, name, user_created_at, created_at, updated_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9);`)
-	_, err := p.conn.Exec(q, UserID, IsVerified, TotalFollowing, TotalFollowers, Username, Name, UserCreatedAt, now, now)
+					  username, name, user_created_at, created_at, updated_at, location) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`)
+	_, err := p.conn.Exec(q, UserID, IsVerified, TotalFollowing, TotalFollowers, Username, Name, UserCreatedAt, now, now, Location)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
-	fmt.Println(err)
 	return nil
 }
 
